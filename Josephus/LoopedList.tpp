@@ -4,59 +4,51 @@
 #include <stdexcept>
 #include "LoopedList.h"
 
-template<typename T>
-bool LoopedList<T>::Iterator::operator==(LoopedList::Iterator const &other) const {
+#define TTT template<typename T>
+
+TTT bool LoopedList<T>::Iterator::operator==(LoopedList::Iterator const &other) const {
     return node == other.node && list == other.list;
 }
 
-template<typename T>
-typename LoopedList<T>::Iterator LoopedList<T>::Iterator::next() {
+TTT LoopedList<T>::Iterator LoopedList<T>::Iterator::next() {
     return LoopedList::Iterator(node->next, list);
 }
 
-template<typename T>
-[[maybe_unused]] typename LoopedList<T>::Iterator LoopedList<T>::Iterator::prev() {
+TTT [[maybe_unused]] LoopedList<T>::Iterator LoopedList<T>::Iterator::prev() {
     return LoopedList::Iterator(node->prev, list);
 }
 
-template<typename T>
-T &LoopedList<T>::Iterator::value() {
+TTT T &LoopedList<T>::Iterator::value() {
     return node->value;
 }
 
-template<typename T>
-LoopedList<T>::LoopedList() {
+TTT LoopedList<T>::LoopedList() {
     head = tail = nullptr;
 }
 
-template<typename T>
-LoopedList<T>::~LoopedList() {
+TTT LoopedList<T>::~LoopedList() {
     clear();
 }
 
-template<typename T>
-[[nodiscard]] typename LoopedList<T>::Iterator LoopedList<T>::begin() {
+TTT [[nodiscard]] LoopedList<T>::Iterator LoopedList<T>::begin() {
     if (empty()) {
         throw std::out_of_range("List is empty");
     }
     return Iterator(head, this);
 }
 
-template<typename T>
-typename LoopedList<T>::Iterator LoopedList<T>::end() {
+TTT LoopedList<T>::Iterator LoopedList<T>::end() {
     if (empty()) {
         throw std::out_of_range("List is empty");
     }
     return LoopedList::Iterator(tail, this);
 }
 
-template<typename T>
-bool LoopedList<T>::empty() {
+TTT bool LoopedList<T>::empty() {
     return head == nullptr;
 }
 
-template<typename T>
-void LoopedList<T>::clear() {
+TTT void LoopedList<T>::clear() {
     if (empty()) {
         return;
     }
@@ -70,8 +62,7 @@ void LoopedList<T>::clear() {
     head = tail = nullptr;
 }
 
-template<typename T>
-void LoopedList<T>::remove(LoopedList::Iterator it) {
+TTT void LoopedList<T>::remove(LoopedList::Iterator it) {
     if (it.list != this)
         throw std::invalid_argument("Iterator does not belong to this list");
     if (it.next().node == it.node) {
@@ -91,8 +82,7 @@ void LoopedList<T>::remove(LoopedList::Iterator it) {
     delete it.node;
 }
 
-template<typename T>
-void LoopedList<T>::insertAfter(LoopedList::Iterator it, const T &value) {
+TTT void LoopedList<T>::insertAfter(LoopedList::Iterator it, const T &value) {
     if (it.list != this)
         throw std::invalid_argument("Iterator does not belong to this list");
     auto *newNode = new ListNode{value, it.node->next, it.node};
@@ -103,8 +93,7 @@ void LoopedList<T>::insertAfter(LoopedList::Iterator it, const T &value) {
     }
 }
 
-template<typename T>
-void LoopedList<T>::insertFront(const T &value) {
+TTT void LoopedList<T>::insertFront(const T &value) {
     if (empty()) {
         head = tail = new ListNode{value, nullptr, nullptr};
         head->next = head->prev = head;
@@ -116,13 +105,14 @@ void LoopedList<T>::insertFront(const T &value) {
     }
 }
 
-template<typename T>
-void LoopedList<T>::insertBack(const T &value) {
+TTT void LoopedList<T>::insertBack(const T &value) {
     if (empty()) {
         insertFront(value);
     } else {
         insertAfter(end(), value);
     }
 }
+
+#undef TTT
 
 #endif //JOSEPHUS_LOOPEDLIST_HPP
