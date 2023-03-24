@@ -1,38 +1,38 @@
 #include <stdexcept>
-#include "LinkedList.h"
+#include "LoopedList.h"
 
 template<typename T>
-bool LinkedList<T>::Iterator::operator==(LinkedList::Iterator const &other) const {
+bool LoopedList<T>::Iterator::operator==(LoopedList::Iterator const &other) const {
     return node == other.node && list == other.list;
 }
 
 template<typename T>
-typename LinkedList<T>::Iterator LinkedList<T>::Iterator::next() {
-    return LinkedList::Iterator(node->next, list);
+typename LoopedList<T>::Iterator LoopedList<T>::Iterator::next() {
+    return LoopedList::Iterator(node->next, list);
 }
 
 template<typename T>
-typename LinkedList<T>::Iterator LinkedList<T>::Iterator::prev() {
-    return LinkedList::Iterator(node->prev, list);
+[[maybe_unused]] typename LoopedList<T>::Iterator LoopedList<T>::Iterator::prev() {
+    return LoopedList::Iterator(node->prev, list);
 }
 
 template<typename T>
-T &LinkedList<T>::Iterator::value() {
+T &LoopedList<T>::Iterator::value() {
     return node->value;
 }
 
 template<typename T>
-LinkedList<T>::LinkedList() {
+LoopedList<T>::LoopedList() {
     head = tail = nullptr;
 }
 
 template<typename T>
-LinkedList<T>::~LinkedList() {
+LoopedList<T>::~LoopedList() {
     clear();
 }
 
 template<typename T>
-[[nodiscard]] typename LinkedList<T>::Iterator LinkedList<T>::begin() {
+[[nodiscard]] typename LoopedList<T>::Iterator LoopedList<T>::begin() {
     if (empty()) {
         throw std::out_of_range("List is empty");
     }
@@ -40,20 +40,20 @@ template<typename T>
 }
 
 template<typename T>
-typename LinkedList<T>::Iterator LinkedList<T>::end() {
+typename LoopedList<T>::Iterator LoopedList<T>::end() {
     if (empty()) {
         throw std::out_of_range("List is empty");
     }
-    return LinkedList::Iterator(tail, this);
+    return LoopedList::Iterator(tail, this);
 }
 
 template<typename T>
-bool LinkedList<T>::empty() {
+bool LoopedList<T>::empty() {
     return head == nullptr;
 }
 
 template<typename T>
-void LinkedList<T>::clear() {
+void LoopedList<T>::clear() {
     if (empty()) {
         return;
     }
@@ -68,7 +68,7 @@ void LinkedList<T>::clear() {
 }
 
 template<typename T>
-void LinkedList<T>::remove(LinkedList::Iterator it) {
+void LoopedList<T>::remove(LoopedList::Iterator it) {
     if (it.list != this)
         throw std::invalid_argument("Iterator does not belong to this list");
     if (it.next().node == it.node) {
@@ -89,7 +89,7 @@ void LinkedList<T>::remove(LinkedList::Iterator it) {
 }
 
 template<typename T>
-void LinkedList<T>::insertAfter(LinkedList::Iterator it, const T &value) {
+void LoopedList<T>::insertAfter(LoopedList::Iterator it, const T &value) {
     if (it.list != this)
         throw std::invalid_argument("Iterator does not belong to this list");
     auto *newNode = new ListNode{value, it.node->next, it.node};
@@ -101,7 +101,7 @@ void LinkedList<T>::insertAfter(LinkedList::Iterator it, const T &value) {
 }
 
 template<typename T>
-void LinkedList<T>::insertFront(const T &value) {
+void LoopedList<T>::insertFront(const T &value) {
     if (empty()) {
         head = tail = new ListNode{value, nullptr, nullptr};
         head->next = head->prev = head;
@@ -114,12 +114,10 @@ void LinkedList<T>::insertFront(const T &value) {
 }
 
 template<typename T>
-void LinkedList<T>::insertBack(const T &value) {
+void LoopedList<T>::insertBack(const T &value) {
     if (empty()) {
         insertFront(value);
     } else {
         insertAfter(end(), value);
     }
 }
-
-template class LinkedList<int>; ///TODO: find some way to avoid this

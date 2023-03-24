@@ -1,8 +1,8 @@
 #include <iostream>
-#include "LinkedList.h"
+#include "LoopedList.h"
 
-inline int josephus_formula(int n) {
-    int highestBit = 1;
+inline auto josephus_formula(unsigned int n) {
+    unsigned int highestBit = 1;
     while (highestBit <= n) {
         highestBit <<= 1;
     }
@@ -13,8 +13,8 @@ inline int josephus_formula(int n) {
 int main() {
     std::cout << "Enter non-int value to exit" << std::endl;
     while(true) {
-        LinkedList<int> testlist;
-        int nr;
+        LoopedList<unsigned int> testlist;
+        unsigned int nr;
         std::cin >> nr;
         if(std::cin.fail()) {
             std::cin.clear();
