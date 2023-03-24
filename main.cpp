@@ -11,15 +11,23 @@ inline auto josephus_formula(unsigned int n) {
 }
 
 int main() {
-    std::cout << "Enter non-int value to exit" << std::endl;
+    std::cout << "Enter non-unsigned int value to exit" << std::endl;
     while(true) {
         LoopedList<unsigned int> testlist;
         unsigned int nr;
-        std::cin >> nr;
-        if(std::cin.fail()) {
-            std::cin.clear();
-            std::cin.ignore();
-            break;
+        {
+            std::string input;
+            getline(std::cin, input);
+            try {
+                if(input.find('-') != std::string::npos)
+                    throw std::invalid_argument("Minus sign found");
+                nr = std::stoul(input);
+            } catch (std::invalid_argument &e) {
+                break;
+            } catch (std::out_of_range &e) {
+                std::cout<<"Number out of range, try again"<<std::endl;
+                continue;
+            }
         }
         for (int i = 1; i <= nr; ++i) {
             testlist.insertBack(i);
