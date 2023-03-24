@@ -1,6 +1,4 @@
 cmake_minimum_required(VERSION 3.24)
-project(Josephus)
+project(Cod-SD)
 
-set(CMAKE_CXX_STANDARD 17)
-
-add_executable(Josephus main.cpp)
+add_subdirectory("${PROJECT_SOURCE_DIR}/Josephus")
