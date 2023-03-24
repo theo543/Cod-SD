@@ -1,0 +1,9 @@
+#ifndef SKIPLISTVSLIST_SKIPLIST_TPP
+#define SKIPLISTVSLIST_SKIPLIST_TPP
+
+#define TTT template <typename T>
+
+
+#undef TTT
+
+#endif //SKIPLISTVSLIST_SKIPLIST_TPP
