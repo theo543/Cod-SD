@@ -1,3 +1,6 @@
+#ifndef JOSEPHUS_LOOPEDLIST_HPP
+#define JOSEPHUS_LOOPEDLIST_HPP
+
 #include <stdexcept>
 #include "LoopedList.h"
 
@@ -121,3 +124,5 @@ void LoopedList<T>::insertBack(const T &value) {
         insertAfter(end(), value);
     }
 }
+
+#endif //JOSEPHUS_LOOPEDLIST_HPP
