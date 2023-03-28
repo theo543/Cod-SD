@@ -17,6 +17,7 @@ private:
         inline explicit ListNode(T const &&value, unsigned int levels) : value(std::move(value)), levels(levels), skips(std::make_unique<NodePair[]>(levels)) {}
     };
     ListNode *head, *tail;
+    unsigned int length = 0;
 public:
 
     class Iterator {
@@ -41,7 +42,7 @@ public:
 
     [[nodiscard]] Iterator begin();
     [[nodiscard]] Iterator end();
-    [[nodiscard]] bool empty();
+    [[nodiscard]] unsigned int getLength();
 
     SkipList();
     ~SkipList();
