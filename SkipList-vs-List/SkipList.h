@@ -11,10 +11,10 @@ private:
             ListNode *prev, *next;
         };
         T value;
-        unsigned int skipLen = 0;
+        unsigned int levels = 0;
         std::unique_ptr<NodePair[]> skips;
-        inline ListNode(T const &value, unsigned int skipLen) : value(value), skipLen(skipLen), skips(std::make_unique<NodePair[]>(skipLen)) {}
-        inline ListNode(T const &&value, unsigned int skipLen) : value(std::move(value)), skipLen(skipLen), skips(std::make_unique<NodePair[]>(skipLen)) {}
+        inline explicit ListNode(T const &value, unsigned int levels) : value(value), levels(levels), skips(std::make_unique<NodePair[]>(levels)) {}
+        inline explicit ListNode(T const &&value, unsigned int levels) : value(std::move(value)), levels(levels), skips(std::make_unique<NodePair[]>(levels)) {}
     };
     ListNode *head, *tail;
 public:
@@ -26,11 +26,11 @@ public:
         Iterator() = default;
         Iterator(ListNode *node, SkipList<T> *list) : node(node), list(list) {} // only the list makes these
     public:
-        [[nodiscard]] Iterator next(unsigned int skips);
-        [[nodiscard]] [[maybe_unused]] Iterator prev(unsigned int skips);
-        [[nodiscard]] unsigned int getSkips() const;
-        [[nodiscard]] const T &value();
-        bool operator==(Iterator const &other) const;
+        [[nodiscard]] inline Iterator next(unsigned int level){return {this->node->skips[level].next, this};}
+        [[nodiscard]] [[maybe_unused]] inline Iterator prev(unsigned int level){return {this->node->skips[level].prev, this};}
+        [[nodiscard]] inline unsigned int getSkips() const{return this->node->levels;}
+        [[nodiscard]] inline const T &value(){return this->node->value;}
+        bool operator==(Iterator const &other) const{return this->node == other->node;}
         friend class SkipList;
     };
 
