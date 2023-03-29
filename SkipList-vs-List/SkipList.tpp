@@ -7,11 +7,13 @@
 
 #include <limits>
 
-TTT SLI SL::find(T const &value) {
+TTT SLI SL::lower_bound(T const &value) {
     if(!length)
-        throw std::out_of_range("List is empty");
-    if(head->value > value)
+        return {nullptr, this};
+    if(value < head->value)
         return {head, this};
+    if(tail->value < value)
+        return {tail, this};
     unsigned int max_skip = std::numeric_limits<unsigned int>::max();
     auto ptr = head;
     while(max_skip && ptr->value != value) {
@@ -24,9 +26,18 @@ TTT SLI SL::find(T const &value) {
     return {ptr, this};
 }
 
+TTT SLI SL::find(T const &value) {
+    auto iter = lower_bound(value);
+    if(iter.isNull() || iter.value() != value)
+        return {nullptr, this};
+    return iter;
+}
+
 TTT void SL::remove(SLI it) {
     if(it.list != this)
         throw std::invalid_argument("Iterator does come from this list");
+    if(it.node == nullptr)
+        throw std::invalid_argument("Cannot remove a null pointer");
     auto node = it.node;
     if(node->skips[0].prev != nullptr) {
         for(int i = 0;i<node->levels;i++)
@@ -55,12 +66,37 @@ TTT void SL::clear() {
 }
 
 TTT void SL::insert(T const &value) {
-    ///TODO
+    //TODO placeholder
+    auto node = new ListNode(value, 1);
+    if(length == 0) {
+        head = tail = node;
+        length = 1;
+        return;
+    }
+    auto ins_before = lower_bound(value).node;
+    if(ins_before && ins_before->value < value)
+        ins_before = ins_before->skips[0].next;
+    if(ins_before == nullptr) {
+        tail->skips[0].next = node;
+        node->skips[0].prev = tail;
+        tail = node;
+    } else {
+        auto before_node = ins_before->skips[0].prev;
+        auto after_node = ins_before;
+        if(before_node)
+            before_node->skips[0].next = node;
+        after_node->skips[0].prev = node;
+        node->skips[0].prev = before_node;
+        node->skips[0].next = after_node;
+        if(after_node == head)
+            head = node;
+    }
+    length++;
 }
 
 TTT SLI SL::begin() {return {head, this};}
 TTT SLI SL::end() {return {tail, this};}
-TTT unsigned int SL::getLength() {return length;}
+TTT [[maybe_unused]] unsigned int SL::getLength() {return length;}
 
 TTT SL::SkipList() : head(nullptr), tail(nullptr), length(0) {}
 TTT SL::~SkipList() {

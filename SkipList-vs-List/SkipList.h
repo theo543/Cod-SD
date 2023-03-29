@@ -24,25 +24,27 @@ public:
     private:
         ListNode *node = nullptr;
         SkipList<T> *list = nullptr;
-        Iterator() = default;
         Iterator(ListNode *node, SkipList<T> *list) : node(node), list(list) {} // only the list makes these
     public:
-        [[nodiscard]] inline Iterator next(unsigned int level){return {this->node->skips[level].next, this};}
-        [[nodiscard]] [[maybe_unused]] inline Iterator prev(unsigned int level){return {this->node->skips[level].prev, this};}
-        [[nodiscard]] inline unsigned int getSkips() const{return this->node->levels;}
+        [[nodiscard]] inline Iterator next(unsigned int level){return Iterator{this->node->skips[level].next, this->list};}
+        [[nodiscard]] [[maybe_unused]] inline Iterator prev(unsigned int level){return {this->node->skips[level].prev, this->list};}
+        [[nodiscard]] inline unsigned int getLevels() const{return this->node->levels;}
         [[nodiscard]] inline const T &value(){return this->node->value;}
         bool operator==(Iterator const &other) const{return this->node == other->node;}
+        bool isNull() {return node == nullptr;}
         friend class SkipList;
     };
 
+    Iterator lower_bound(T const &value);
     Iterator find(T const &value);
+
     void remove(Iterator it);
     void clear();
     void insert(T const &value);
 
     [[nodiscard]] Iterator begin();
     [[nodiscard]] Iterator end();
-    [[nodiscard]] unsigned int getLength();
+    [[nodiscard]] [[maybe_unused]] unsigned int getLength();
 
     SkipList();
     ~SkipList();
