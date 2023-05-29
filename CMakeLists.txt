@@ -3,3 +3,4 @@ project(Cod-SD)
 
 add_subdirectory("${PROJECT_SOURCE_DIR}/Josephus")
 add_subdirectory("${PROJECT_SOURCE_DIR}/SkipList-vs-List")
+add_subdirectory("${PROJECT_SOURCE_DIR}/CheckLineCol")
