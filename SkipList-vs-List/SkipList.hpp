@@ -6,6 +6,8 @@
 #include <cassert>
 #include <random>
 #include <algorithm>
+#include <iosfwd>
+#include <concepts>
 
 /**
  * Skip List invariant:
@@ -79,6 +81,10 @@ public:
         const T &operator->() const {
             return node->value.value();
         }
+        Iterator &operator++() {
+            node = node->links[0].next;
+            return *this;
+        }
         friend class SkipList;
     };
 
@@ -98,10 +104,13 @@ public:
             }
         }
         // we will arrive right before the first element >= value
-        return Iterator{it->links[0].next};
+        auto result = it->links[0].next;
+        if(result == tail || result->value != value)
+            return end();
+        return result->iter();
     }
 
-    void remove(Iterator it) {
+    void erase(Iterator it) {
         if(it.node == tail) throw std::out_of_range("Cannot remove past-the-end element");
         if(it.node == head) throw std::out_of_range("Cannot remove before-the-start element");
         ListNode *node = it.node;
