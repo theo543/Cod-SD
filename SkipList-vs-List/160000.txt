@@ -1,0 +1,27 @@
+SkipList insert 160000: 192ms
+Checking if all elements were inserted and are in order
+SkipList search 80000: 59ms
+Checking if all elements were found
+SkipList delete searched data: 18ms
+SkipList search after delete 80000: 48ms
+Checking if all non-deleted elements were found
+
+
+SortedList insert 160000: 94983ms
+Checking if all elements were inserted and are in order
+SortedList search 80000: 193113ms
+Checking if all elements were found
+SortedList delete searched data: 3ms
+SortedList search after delete 80000: 65007ms
+Checking if all non-deleted elements were found
+
+
+std::set insert 160000: 42ms
+Checking if all elements were inserted and are in order
+std::set search 80000: 17ms
+Checking if all elements were found
+std::set delete searched data: 8ms
+std::set search after delete 80000: 11ms
+Checking if all non-deleted elements were found
+
+
