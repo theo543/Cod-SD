@@ -6,6 +6,9 @@ to run the same tests on both data structures. I tried to match the API of std::
 
 I used the _random_ and _chrono_ headers for testing.
 
+To make sure there weren't any memory corruption or leak issues, I used -fsanitize=address,leak,undefined in CMakeLists.txt to instrument the code with runtime checks.
+I had to run this in WSL, since the Windows version of clang doesn't support these sanitizers.
+
 ### Issues
 
 I had some trouble figuring out how the insert method should work without spending O(n) time figuring

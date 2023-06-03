@@ -91,7 +91,7 @@ public:
         return length;
     }
 
-    SortedList() : length(0), head(new ListNode()), tail(new ListNode()) {
+    SortedList() : head(new ListNode()), tail(new ListNode()), length(0) {
         head->next = tail;
         tail->prev = head;
     }
