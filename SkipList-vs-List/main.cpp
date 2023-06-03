@@ -1,9 +1,10 @@
 #include <iostream>
-#include "SkipList.h"
+#include <random>
+#include "SkipList.hpp"
 
 void print_list(SkipList<int> &list) {
-    for(auto iter = list.begin();!iter.isNull();iter = iter.next(0)) {
-        std::cout<<iter.value()<<' ';
+    for(auto iter = list.begin();iter != list.end();iter = iter.next()) {
+        std::cout<<*iter<<' ';
     }
     std::cout<<std::endl;
 }
