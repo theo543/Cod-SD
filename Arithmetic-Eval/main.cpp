@@ -55,6 +55,8 @@ std::vector<Token> tokenise(const std::string& expr) {
             finishNumber();
             tokens.emplace_back(Token::CloseParenthesis, std::string(iter, iter + 1));
             begin = iter + 1;
+        } else {
+            throw std::runtime_error("Unknown character");
         }
     }
     finishNumber();
@@ -98,8 +100,8 @@ int main() {
         try {
             std::string expression;
             std::cout << "Enter an expression: ";
-            if (expression.starts_with("exit")) break;
             std::getline(std::cin, expression);
+            if (expression.starts_with("exit")) break;
             expression += '\n';
             auto tokens = tokenise(expression);
             auto iter = tokens.begin();
