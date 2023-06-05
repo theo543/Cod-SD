@@ -35,7 +35,9 @@ namespace {
 bool intersect(const Line &a, const Line &b) {
     if(!AABB_collide(calc_AABB(a), calc_AABB(b)))
         return false;
-    ///TODO degenerate cases (point on line ?????)
+    // check if any endpoints touch
+    if(a.start == b.start || a.start == b.end || a.end == b.start || a.end == b.end)
+        return true;
     return different_sides(a, b.start, b.end) || different_sides(b, a.start, a.end);
 }
 

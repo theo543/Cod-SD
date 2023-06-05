@@ -5,7 +5,7 @@
 
 namespace {
     const auto sweepCompareLines = [](const Line &a, const Line &b) {
-        return a.start.y < b.start.y;
+        return a.start.y < b.start.y || (a.start.y == b.start.y && a.start.x < b.start.x);
     };
     typedef std::set<Line, decltype(sweepCompareLines)> SweepSet;
     struct SweepStopPoint {
@@ -18,7 +18,8 @@ namespace {
         }
     };
 }
-
+#include <iostream>
+#include <fmt/format.h>
 OptCol check_col_sweep(const std::vector<Line> &lines) {
     SweepSet sset;
     std::vector<SweepStopPoint> stops;
@@ -34,20 +35,25 @@ OptCol check_col_sweep(const std::vector<Line> &lines) {
     }
     std::sort(stops.begin(), stops.end(), [](const SweepStopPoint &p1, const SweepStopPoint &p2) -> bool {
         const auto P1 = (p1.l.*p1.p), P2 = (p2.l.*p2.p);
-        return P1.x < P2.x || (P1.x == P2.x && P1.y < P2.y);
+        if(P1.x < P2.x)
+            return true;
+        else if (P1.x > P2.x)
+            return false;
+        else return p1.is_begin();
     });
     for(const auto &stop : stops) {
         const auto &line = stop.l;
         if(stop.is_begin()) {
+//            std::cout << fmt::format("point ({}, {}) is begin of line (({}, {}), ({}, {}))", (line.*stop.p).x, (line.*stop.p).y, line.start.x, line.start.y, line.end.x, line.end.y) << std::endl;
             auto it = sset.insert(line).first;
             assert(it != sset.end());
             auto above = std::next(it), below = it == sset.begin() ? sset.end() : std::prev(it);
-            above++;
             if(above != sset.end() && intersect(*above, *it))
                 return Collision{*above, *it};
             if(below != sset.end() && intersect(*below, *it))
                 return Collision{*below, *it};
         } else {
+//1            std::cout << fmt::format("point ({}, {}) is end of line (({}, {}), ({}, {}))", (line.*stop.p).x, (line.*stop.p).y, line.start.x, line.start.y, line.end.x, line.end.y) << std::endl;
             assert(stop.is_end());
             auto it = sset.find(line);
             assert(it != sset.end());
