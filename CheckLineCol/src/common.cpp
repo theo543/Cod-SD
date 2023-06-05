@@ -1,3 +1,4 @@
+#include <random>
 #include "common.h"
 
 namespace {
@@ -25,8 +26,8 @@ namespace {
         return {tl, br};
     }
     bool AABB_collide(const AABB &a, const AABB &b) {
-        bool xAxis = a.start.x < b.end.x && b.start.x < a.end.x;
-        bool yAxis = a.start.y < b.end.y && b.start.y < a.end.y;
+        bool xAxis = a.start.x <= b.end.x && b.start.x <= a.end.x;
+        bool yAxis = a.start.y <= b.end.y && b.start.y <= a.end.y;
         return xAxis && yAxis;
     }
 }
@@ -36,4 +37,16 @@ bool intersect(const Line &a, const Line &b) {
         return false;
     ///TODO degenerate cases (point on line ?????)
     return different_sides(a, b.start, b.end) || different_sides(b, a.start, a.end);
+}
+
+std::vector<Line> generate_testcase(std::size_t nr_lines) {
+    std::mt19937 rand {std::random_device{}()};
+    std::uniform_real_distribution<double> dist {0, 100};
+    std::vector<Line> lines;
+    for(std::size_t i = 0;i<nr_lines;i++) {
+        lines.push_back({{dist(rand), dist(rand)}, {dist(rand), dist(rand)}});
+    }
+    auto &last = lines.back();
+    lines.push_back({{last.end.x, last.start.y}, {last.start.x, last.end.y}});
+    return lines;
 }

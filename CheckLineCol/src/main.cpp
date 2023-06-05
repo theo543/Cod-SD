@@ -25,13 +25,13 @@ int main() {
         auto smart = check_col_sweep(testcase);
         if(naive.has_value() != smart.has_value()) {
             color("red", "Algorithms disagree!", true);
-            color("red", fmt::format("Naive says:{}\nSmart says:[]\n",
+            color("red", fmt::format("Naive says:{}\nSmart says:{}\n",
                   col_string(naive), col_string(smart)), false);
         } else {
             color("green", "Algorithms agree.");
             if(!naive.has_value())
                 std::cout << "No collision.\n";
-            else if(naive.value() == smart.value()) {
+            else if(naive.value() == smart.value() || naive.value() == Collision{smart.value().line2, smart.value().line1}) {
                 std::cout << "Algorithms returned same collision.\n";
             } else {
                 std::cout << "Algorithms returned different collisions.\n";

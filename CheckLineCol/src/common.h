@@ -27,6 +27,6 @@ typedef std::optional<Collision> OptCol;
 bool intersect(const Line&, const Line&);
 OptCol check_col_bruteforce(const std::vector<Line>&);
 OptCol check_col_sweep(const std::vector<Line>&);
-std::vector<Line> generate_testcase(std::size_t nr_points);
+std::vector<Line> generate_testcase(std::size_t nr_lines);
 
 #endif //CHECKLINECOL_COMMON_H
